@@ -4,16 +4,19 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Any
+
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from .const import DOMAIN, SURFLINE_RATING_LEVELS
 from homeassistant.util import slugify
+
+from .const import DOMAIN, SURFLINE_RATING_LEVELS
 
 _LOGGER = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from .data import SurfForecastIntegrationConfigEntry
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
+    from .data import SurfForecastIntegrationConfigEntry
 
 
 async def async_setup_entry(

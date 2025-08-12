@@ -1,13 +1,10 @@
 """Diagnostics support for surf_forecast_integration."""
 
 from __future__ import annotations
-from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers import entity_registry as er
-from homeassistant.helpers import diagnostics
 
-from .const import DOMAIN
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import diagnostics
 
 TO_REDACT = ["api_key", "password"]
 

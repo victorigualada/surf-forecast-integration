@@ -1,8 +1,10 @@
 from __future__ import annotations
+
 import logging
-from typing import Any
-import aiohttp
 import socket
+from typing import Any
+
+import aiohttp
 
 _LOGGER = logging.getLogger(__name__)
 

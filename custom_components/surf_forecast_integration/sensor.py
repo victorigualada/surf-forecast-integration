@@ -5,20 +5,16 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.helpers.event import async_track_state_change
 from homeassistant.util import slugify
 
 from .const import DOMAIN, SURFLINE_RATING_KEY_TO_ICON
-from .entity import SurfForecastIntegrationEntity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import BlueprintDataUpdateCoordinator
     from .data import SurfForecastIntegrationConfigEntry
 
 

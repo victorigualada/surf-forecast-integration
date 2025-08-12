@@ -5,14 +5,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.exceptions import ConfigEntryAuthFailed
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import (
+    SurfForecastIntegrationApiClient,
     SurfForecastIntegrationApiClientAuthenticationError,
     SurfForecastIntegrationApiClientError,
-    SurfForecastIntegrationApiClient,
 )
 
 if TYPE_CHECKING:

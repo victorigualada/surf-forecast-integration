@@ -61,4 +61,5 @@ The integration supports UI translations. If you see translation keys instead of
 
 ---
 Maintained by victorigualada. Contributions welcome!
+
 Thanks to ludeeus for the original integration template.

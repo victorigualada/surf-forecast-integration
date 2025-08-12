@@ -8,12 +8,11 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, SURFLINE_RATING_LEVELS
-from .entity import SurfForecastIntegrationEntity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
-    from .coordinator import BlueprintDataUpdateCoordinator
+
     from .data import SurfForecastIntegrationConfigEntry
 
 

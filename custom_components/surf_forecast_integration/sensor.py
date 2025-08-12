@@ -14,12 +14,14 @@ from homeassistant.util import slugify
 from .const import DOMAIN, SURFLINE_RATING_KEY_TO_ICON, SURFLINE_RATING_LEVELS
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
     from .data import SurfForecastIntegrationConfigEntry
 
 
 async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001 Unused function argument: `hass`
     entry: SurfForecastIntegrationConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:

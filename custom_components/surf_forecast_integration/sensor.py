@@ -2,32 +2,27 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+import logging
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
-
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.helpers.event import async_track_state_change
 from homeassistant.util import slugify
 
-from .const import DOMAIN, SURFLINE_RATING_KEY_TO_ICON
-from .entity import SurfForecastIntegrationEntity
+from .const import DOMAIN, SURFLINE_RATING_KEY_TO_ICON, SURFLINE_RATING_LEVELS
 
 if TYPE_CHECKING:
-    from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import BlueprintDataUpdateCoordinator
     from .data import SurfForecastIntegrationConfigEntry
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
     entry: SurfForecastIntegrationConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up a single Surfline rating sensor with all forecasted ratings as attributes."""
+    """Set up a rating sensor with all forecasted ratings as attributes."""
     coordinator = entry.runtime_data.coordinator
     async_add_entities(
         [
@@ -38,7 +33,7 @@ async def async_setup_entry(
 
 
 class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
-    import logging
+    """Sensor for the first forecasted date/time that meets the selected min rating."""
 
     _LOGGER = logging.getLogger(__name__)
 
@@ -50,7 +45,7 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
         select_entity_id = f"select.{spot_slug}_minimum_surf_rating"
         rating_entity_id = f"sensor.{spot_slug}_surf_rating"
 
-        async def _handle_related_change(event):
+        async def _handle_related_change(event: object) -> None:  # noqa: ARG001
             """Handle related entity state change by updating this sensor's state."""
             self.async_write_ha_state()
 
@@ -68,12 +63,22 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
         )
         # Also listen for coordinator updates (already handled by CoordinatorEntity)
 
-    """Sensor for the first forecasted date/time that meets or exceeds the selected minimum rating."""
+    """Sensor for the first forecasted date/time that meets or exceeds the selected
+    minimum rating.
+    """
 
     _attr_has_entity_name = True
     _attr_translation_key = "next_desired_condition_date"
 
     def __init__(self, coordinator: CoordinatorEntity, config_entry: Any) -> None:
+        """
+        Initialize the SurflineFirstMetConditionSensor.
+
+        Args:
+            coordinator: The data update coordinator instance.
+            config_entry: The config entry for this integration.
+
+        """
         super().__init__(coordinator)
         self.config_entry = config_entry
         self._attr_unique_id = f"{config_entry.entry_id}_next_desired_condition_date"
@@ -81,13 +86,13 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,
-            "manufacturer": "Surfline",
-            "model": "Surf Spot",
+            "manufacturer": "victorigualada",
+            "model": "Surf forecast",
         }
 
     @property
     def native_value(self) -> str | None:
-        """Return the ISO date/time of the first forecast that meets/exceeds the selected minimum rating."""
+        """Return the ISO date/time of the first forecast that meets min rating."""
         hass = self.coordinator.hass
         spot_slug = slugify(self.config_entry.title)
         select_entity_id = f"select.{spot_slug}_minimum_surf_rating"
@@ -101,24 +106,22 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
             or "rating" not in data["data"]
         ):
             return None
-        from .const import SURFLINE_RATING_LEVELS
 
         min_index = SURFLINE_RATING_LEVELS.index(min_rating)
         for rating in data["data"]["rating"]:
             key = rating["rating"].get("key")
             if key and SURFLINE_RATING_LEVELS.index(key) >= min_index:
                 # Convert timestamp to ISO 8601 string
-                from datetime import datetime
-
-                iso_date = (
-                    datetime.utcfromtimestamp(rating["timestamp"]).isoformat() + "Z"
+                return (
+                    datetime.fromtimestamp(rating["timestamp"], tz=UTC)
+                    .isoformat()
+                    .replace("+00:00", "Z")
                 )
-                return iso_date
         return None
 
 
 class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
-    """Sensor for Surfline spot rating (current/next rating, with all ratings as attributes)."""
+    """Sensor for Surfline spot rating (current/next rating)."""
 
     _attr_has_entity_name = True
     _attr_translation_key = "surf_rating"
@@ -132,8 +135,8 @@ class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,
-            "manufacturer": "Surfline",
-            "model": "Surf Spot",
+            "manufacturer": "victorigualada",
+            "model": "Surf forecast",
         }
 
     @property
@@ -142,7 +145,7 @@ class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
         data = self.coordinator.data
         if not data or "data" not in data or "rating" not in data["data"]:
             return None
-        now = datetime.utcnow().timestamp()
+        now = datetime.now(UTC).timestamp()
         for rating in data["data"]["rating"]:
             if rating["timestamp"] >= now:
                 return rating["rating"].get("key")
@@ -154,7 +157,7 @@ class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
         data = self.coordinator.data
         if not data or "data" not in data or "rating" not in data["data"]:
             return None
-        now = datetime.utcnow().timestamp()
+        now = datetime.now(UTC).timestamp()
         for rating in data["data"]["rating"]:
             if rating["timestamp"] >= now:
                 return SURFLINE_RATING_KEY_TO_ICON.get(

@@ -5,14 +5,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.exceptions import ConfigEntryAuthFailed
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import (
+    SurfForecastIntegrationApiClient,
     SurfForecastIntegrationApiClientAuthenticationError,
     SurfForecastIntegrationApiClientError,
-    SurfForecastIntegrationApiClient,
 )
 
 if TYPE_CHECKING:
@@ -36,5 +35,7 @@ class BlueprintDataUpdateCoordinator(DataUpdateCoordinator):
             raise ConfigEntryAuthFailed(exception) from exception
         except SurfForecastIntegrationApiClientError as exception:
             raise UpdateFailed(exception) from exception
-        except Exception as err:
-            raise UpdateFailed(f"Error fetching Surfline data: {err}")
+        except OSError as err:
+            # Catch network-related errors (socket, aiohttp, etc.)
+            msg = "Error fetching Surfline data: network or system error"
+            raise UpdateFailed(msg) from err

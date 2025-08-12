@@ -8,17 +8,14 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, SURFLINE_RATING_LEVELS
-from .entity import SurfForecastIntegrationEntity
 
 if TYPE_CHECKING:
-    from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
-    from .coordinator import BlueprintDataUpdateCoordinator
+
     from .data import SurfForecastIntegrationConfigEntry
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
     entry: SurfForecastIntegrationConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
@@ -35,9 +32,18 @@ class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
 
     @property
     def current_option(self) -> str | None:
+        """Return the currently selected minimum surf rating option."""
         return self._attr_current_option
 
     def __init__(self, coordinator: CoordinatorEntity, config_entry: Any) -> None:
+        """
+        Initialize the SurflineMinRatingSelect entity.
+
+        Args:
+            coordinator: The data update coordinator for surf forecast.
+            config_entry: The config entry associated with this entity.
+
+        """
         super().__init__(coordinator)
         self.config_entry = config_entry
         self._attr_unique_id = f"{config_entry.entry_id}_min_rating"
@@ -47,15 +53,23 @@ class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,
-            "manufacturer": "Surfline",
-            "model": "Surf Spot",
+            "manufacturer": "victorigualada",
+            "model": "Surf forecast",
         }
 
     async def async_added_to_hass(self) -> None:
+        """Handle entity being added to Home Assistant."""
         await super().async_added_to_hass()
         self.async_write_ha_state()
 
     async def async_select_option(self, option: str) -> None:
+        """
+        Change the selected minimum surf rating option.
+
+        Args:
+            option: The new minimum surf rating to select.
+
+        """
         if option in SURFLINE_RATING_LEVELS:
             self._attr_current_option = option
             self.async_write_ha_state()

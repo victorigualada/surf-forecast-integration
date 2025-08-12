@@ -1,8 +1,12 @@
+"""API client for Surf Forecast Integration."""
+
 from __future__ import annotations
+
 import logging
-from typing import Any
-import aiohttp
 import socket
+from typing import Any
+
+import aiohttp
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -50,7 +54,11 @@ class SurfForecastIntegrationApiClient:
         self._session = session
 
     async def async_search_spots(self, query: str) -> list[dict[str, Any]]:
-        """Search for surf spots by name or city using the correct Surfline search URL."""
+        """
+        Search for surf spots by name or city.
+
+        Uses the correct Surfline search URL.
+        """
         url = (
             "https://services.surfline.com/search/site"
             f"?q={query}&querySize=10&suggestionSize=10&newsSearch=true&includeWavePools=false"
@@ -59,7 +67,8 @@ class SurfForecastIntegrationApiClient:
             method="get",
             url=url,
         )
-        # The response structure may differ from the old endpoint, so adapt parsing as needed
+        # The response structure may differ from the old endpoint
+        # so adapt parsing as needed
         spots = []
         for result in response if isinstance(response, list) else [response]:
             hits = result.get("hits", {}).get("hits", [])
@@ -90,12 +99,10 @@ class SurfForecastIntegrationApiClient:
             "https://services.surfline.com/kbyg/spots/forecasts/rating"
             f"?spotId={spot_id}&days=5&intervalHours=1&cacheEnabled=true"
         )
-        response = await self._api_wrapper(
+        return await self._api_wrapper(
             method="get",
             url=url,
         )
-
-        return response
 
     async def _api_wrapper(
         self,

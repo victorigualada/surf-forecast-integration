@@ -2,23 +2,22 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
-from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
-from slugify import slugify
+
+if TYPE_CHECKING:
+    from aiohttp import ClientSession
 
 from .api import (
     SurfForecastIntegrationApiClient,
-    SurfForecastIntegrationApiClientAuthenticationError,
-    SurfForecastIntegrationApiClientCommunicationError,
-    SurfForecastIntegrationApiClientError,
 )
-from .const import DOMAIN, LOGGER
+from .const import DOMAIN
 
 
-async def async_search_spots(session, spot_query):
+async def async_search_spots(session: ClientSession, spot_query: str):  # noqa: ANN201
     """Search for surf spots matching the query."""
     return await SurfForecastIntegrationApiClient(session=session).async_search_spots(
         spot_query
@@ -41,7 +40,9 @@ class SurfForecastFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             session = async_create_clientsession(self.hass)
             try:
                 spots = await async_search_spots(session, spot_query)
-            except Exception:
+            except (
+                Exception  # noqa: BLE001
+            ):  # Replace with specific exception if possible
                 errors["base"] = "cannot_connect"
                 spots = []
             if not spots:
@@ -65,7 +66,16 @@ class SurfForecastFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_select_spot(self, user_input=None):
+    async def async_step_select_spot(
+        self, user_input: dict | None = None
+    ) -> config_entries.ConfigFlowResult:
+        """
+        Handle the selection of a surf spot by the user.
+
+        Presents a list of available surf spots to the user and creates a config entry
+
+        for the selected spot.
+        """
         errors = {}
         spots = getattr(self, "spot_search_results", [])
         spot_options = {s["spot_id"]: f"{s['name']} ({s['city']})" for s in spots}

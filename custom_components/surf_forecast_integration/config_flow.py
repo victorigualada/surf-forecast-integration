@@ -41,8 +41,8 @@ class SurfForecastFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             try:
                 spots = await async_search_spots(session, spot_query)
             except (
-                Exception
-            ):  # Replace with specific exception if possible  # noqa: BLE001
+                Exception  # noqa: BLE001
+            ):  # Replace with specific exception if possible
                 errors["base"] = "cannot_connect"
                 spots = []
             if not spots:

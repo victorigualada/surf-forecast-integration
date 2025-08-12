@@ -35,5 +35,7 @@ class BlueprintDataUpdateCoordinator(DataUpdateCoordinator):
             raise ConfigEntryAuthFailed(exception) from exception
         except SurfForecastIntegrationApiClientError as exception:
             raise UpdateFailed(exception) from exception
-        except Exception as err:
-            raise UpdateFailed(f"Error fetching Surfline data: {err}")
+        except OSError as err:
+            # Catch network-related errors (socket, aiohttp, etc.)
+            msg = "Error fetching Surfline data: network or system error"
+            raise UpdateFailed(msg) from err

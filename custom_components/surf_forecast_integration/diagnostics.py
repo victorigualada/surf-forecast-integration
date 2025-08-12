@@ -14,7 +14,8 @@ TO_REDACT = ["api_key", "password"]
 
 
 async def async_get_config_entry_diagnostics(
-    hass: HomeAssistant, entry: ConfigEntry
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: ConfigEntry,
 ) -> dict:
     """Return diagnostics for a config entry."""
     return {

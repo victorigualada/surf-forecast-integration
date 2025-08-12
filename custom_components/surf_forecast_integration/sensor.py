@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -51,14 +52,14 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
 
         # Listen for changes to the select entity
         self.async_on_remove(
-            self.hass.helpers.event.async_track_state_change_event(
-                select_entity_id, _handle_related_change
+            async_track_state_change_event(
+                self.hass, select_entity_id, _handle_related_change
             )
         )
         # Listen for changes to the rating sensor entity
         self.async_on_remove(
-            self.hass.helpers.event.async_track_state_change_event(
-                rating_entity_id, _handle_related_change
+            async_track_state_change_event(
+                self.hass, rating_entity_id, _handle_related_change
             )
         )
         # Also listen for coordinator updates (already handled by CoordinatorEntity)

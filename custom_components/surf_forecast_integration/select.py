@@ -10,12 +10,14 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN, SURFLINE_RATING_LEVELS
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
     from .data import SurfForecastIntegrationConfigEntry
 
 
 async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
     entry: SurfForecastIntegrationConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:

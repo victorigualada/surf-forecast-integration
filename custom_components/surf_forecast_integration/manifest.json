@@ -1,0 +1,12 @@
+{
+    "domain": "surf_forecast_integration",
+    "name": "Surf forecast integration",
+    "codeowners": [
+        "@victorigualada"
+    ],
+    "config_flow": true,
+    "documentation": "https://github.com/victorigualada/integration_blueprint",
+    "iot_class": "cloud_polling",
+    "issue_tracker": "https://github.com/victorigualada/integration_blueprint/issues",
+    "version": "0.1.0"
+}

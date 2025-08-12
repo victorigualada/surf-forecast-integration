@@ -1,46 +1,64 @@
-# Notice
+# Surf Forecast Integration for Home Assistant
 
-The component and platforms in this repository are not meant to be used by a
-user, but as a "blueprint" that custom component developers can build
-upon, to make more awesome stuff.
+This custom integration brings Surfline surf forecasts and conditions into Home Assistant, providing sensors, selects, and automations for your favorite surf spots.
 
-HAVE FUN! 😎
+## Features
 
-## Why?
+- Surf rating sensor for each configured spot
+- First met condition sensor (date when good conditions are first met)
+- Select entity to set minimum desired surf rating
+- Binary sensor that turns on when forecast meets or exceeds your minimum rating
+- Blueprint for phone notifications when good conditions are met
+- Supports multiple surf spots (prevents duplicates)
+- UI translations and config flow
 
-This is simple, by having custom_components look (README + structure) the same
-it is easier for developers to help each other and for users to start using them.
+## Installation
 
-If you are a developer and you want to add things to this "blueprint" that you think more
-developers will have use for, please open a PR to add it :)
+1. Copy the `surf_forecast_integration` folder to your Home Assistant `custom_components` directory:
+	 ```
+	 custom_components/surf_forecast_integration/
+	 ```
+2. Restart Home Assistant.
+3. Add the integration via the Home Assistant UI (Settings → Devices & Services → Add Integration → Surf Forecast Integration).
 
-## What?
+## Configuration
 
-This repository contains multiple files, here is a overview:
+1. Search for your surf spot by name in the config flow.
+2. Select the correct spot from the list.
+3. Repeat for additional spots (each spot can only be added once).
 
-File | Purpose | Documentation
--- | -- | --
-`.devcontainer.json` | Used for development/testing with Visual Studio Code. | [Documentation](https://code.visualstudio.com/docs/remote/containers)
-`.github/ISSUE_TEMPLATE/*.yml` | Templates for the issue tracker | [Documentation](https://help.github.com/en/github/building-a-strong-community/configuring-issue-templates-for-your-repository)
-`custom_components/integration_blueprint/*` | Integration files, this is where everything happens. | [Documentation](https://developers.home-assistant.io/docs/creating_component_index)
-`CONTRIBUTING.md` | Guidelines on how to contribute. | [Documentation](https://help.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors)
-`LICENSE` | The license file for the project. | [Documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository)
-`README.md` | The file you are reading now, should contain info about the integration, installation and configuration instructions. | [Documentation](https://help.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax)
-`requirements.txt` | Python packages used for development/lint/testing this integration. | [Documentation](https://pip.pypa.io/en/stable/user_guide/#requirements-files)
+## Entities
 
-## How?
+- **Sensor:**
+	- `sensor.<spot>_surf_rating`: Current/next surf rating
+	- `sensor.<spot>_first_met_condition`: Date when good conditions are first met
+- **Select:**
+	- `select.<spot>_minimum_surf_rating`: Set your minimum desired surf rating
+- **Binary Sensor:**
+	- `binary_sensor.<spot>_good_conditions`: On when forecast meets/exceeds your minimum rating
 
-1. Create a new repository in GitHub, using this repository as a template by clicking the "Use this template" button in the GitHub UI.
-1. Open your new repository in Visual Studio Code devcontainer (Preferably with the "`Dev Containers: Clone Repository in Named Container Volume...`" option).
-1. Rename all instances of the `integration_blueprint` to `custom_components/<your_integration_domain>` (e.g. `custom_components/awesome_integration`).
-1. Rename all instances of the `Integration Blueprint` to `<Your Integration Name>` (e.g. `Awesome Integration`).
-1. Run the `scripts/develop` to start HA and test out your new integration.
+## Automation Blueprint
 
-## Next steps
+Blueprints are provided in `config/blueprints/automation/`:
 
-These are some next steps you may want to look into:
-- Add tests to your integration, [`pytest-homeassistant-custom-component`](https://github.com/MatthewFlamm/pytest-homeassistant-custom-component) can help you get started.
-- Add brand images (logo/icon) to https://github.com/home-assistant/brands.
-- Create your first release.
-- Share your integration on the [Home Assistant Forum](https://community.home-assistant.io/).
-- Submit your integration to [HACS](https://hacs.xyz/docs/publish/start).
+- `surf_spot_good_condition_notification.yaml`: Notifies your phone when good conditions are met for a spot.
+
+## Translations
+
+The integration supports UI translations. If you see translation keys instead of labels, ensure you have restarted Home Assistant after editing translation files.
+
+## Troubleshooting
+
+- If the integration or entities do not appear, check the Home Assistant logs for errors.
+- Ensure the `domain` in `manifest.json` matches the folder name.
+- Restart Home Assistant after any changes to translation or integration files.
+- Only one entry per surf spot is allowed.
+
+## Links
+
+- [Surfline](https://www.surfline.com/)
+- [Home Assistant Custom Integration Docs](https://developers.home-assistant.io/docs/creating_integration_file_structure/)
+
+---
+Maintained by victorigualada. Contributions welcome!
+Thanks to ludeeus for the original integration template.

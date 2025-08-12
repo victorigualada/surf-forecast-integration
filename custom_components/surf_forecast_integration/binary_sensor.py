@@ -20,7 +20,6 @@ if TYPE_CHECKING:
 
 
 async def async_setup_entry(
-    hass,
     entry: SurfForecastIntegrationConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
@@ -30,13 +29,15 @@ async def async_setup_entry(
 
 
 class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
+    """Binary sensor that is on if any forecasted rating meets the selected."""
+
     @property
     def icon(self) -> str:
         """Return a surfing icon if on, bed icon if off."""
         return "mdi:surfing" if self.is_on else "mdi:bed"
 
     async def async_added_to_hass(self) -> None:
-        """Subscribe to select entity state changes and coordinator updates for immediate updates."""
+        """Subscribe to select entity state changes and coordinator updates."""
         await super().async_added_to_hass()
         # Listen for select changes
         spot_slug = slugify(self.config_entry.title)
@@ -44,13 +45,15 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
         sensor_entity_id = f"sensor.{spot_slug}_surf_rating"
         self.async_on_remove(
             self.hass.helpers.event.async_track_state_change_event(
-                select_entity_id, self._handle_select_change
+                select_entity_id,
+                self._handle_select_change,
             )
         )
         # Listen for sensor state changes
         self.async_on_remove(
             self.hass.helpers.event.async_track_state_change_event(
-                sensor_entity_id, self._handle_sensor_change
+                sensor_entity_id,
+                self._handle_sensor_change,
             )
         )
         # Listen for coordinator data refresh
@@ -58,11 +61,11 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
             self.coordinator.async_add_listener(self.async_write_ha_state)
         )
 
-    async def _handle_sensor_change(self, event):
+    async def _handle_sensor_change(self, event: object) -> None:  # noqa: ARG002
         """Handle sensor entity state change by updating binary sensor state."""
         self.async_write_ha_state()
 
-    async def _handle_select_change(self, event):
+    async def _handle_select_change(self, event: object) -> None:  # noqa: ARG002
         """Handle select entity state change by updating binary sensor state."""
         self.async_write_ha_state()
 
@@ -83,8 +86,8 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,
-            "manufacturer": "Surfline",
-            "model": "Surf Spot",
+            "manufacturer": "victorigualada",
+            "model": "Surf Forecast",
         }
 
     @property

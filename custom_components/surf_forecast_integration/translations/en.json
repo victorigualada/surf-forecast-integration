@@ -12,7 +12,7 @@
                 "title": "Surf spots",
                 "description": "Select the surf spot you want to add.",
                 "data": {
-                    "spot_id": " "
+                    "spot_id": "Surf spots"
                 }
             }
         },

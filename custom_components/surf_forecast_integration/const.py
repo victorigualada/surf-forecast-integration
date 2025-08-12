@@ -5,7 +5,7 @@ from logging import Logger, getLogger
 LOGGER: Logger = getLogger(__package__)
 
 DOMAIN = "surf_forecast_integration"
-ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
+ATTRIBUTION = "Data provided by https://surfline.com"
 
 # Mapping of Surfline rating keys to Material Design Icons
 SURFLINE_RATING_KEY_TO_ICON = {

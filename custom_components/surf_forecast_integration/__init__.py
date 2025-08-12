@@ -16,7 +16,7 @@ from homeassistant.loader import async_get_loaded_integration
 
 from .api import SurfForecastIntegrationApiClient
 from .const import DOMAIN, LOGGER
-from .coordinator import BlueprintDataUpdateCoordinator
+from .coordinator import SurfForecastDataUpdateCoordinator
 from .data import SurfForecastIntegrationData
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ async def async_setup_entry(
     entry: SurfForecastIntegrationConfigEntry,
 ) -> bool:
     """Set up this integration using UI."""
-    coordinator = BlueprintDataUpdateCoordinator(
+    coordinator = SurfForecastDataUpdateCoordinator(
         hass=hass,
         logger=LOGGER,
         name=DOMAIN,

@@ -5,15 +5,17 @@ from __future__ import annotations
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import ATTRIBUTION, DOMAIN
-from .coordinator import BlueprintDataUpdateCoordinator
+from .coordinator import SurfForecastDataUpdateCoordinator
 
 
-class SurfForecastIntegrationEntity(CoordinatorEntity[BlueprintDataUpdateCoordinator]):
+class SurfForecastIntegrationEntity(
+    CoordinatorEntity[SurfForecastDataUpdateCoordinator]
+):
     """SurfForecastIntegrationEntity class."""
 
     _attr_attribution = ATTRIBUTION
 
-    def __init__(self, coordinator: BlueprintDataUpdateCoordinator) -> None:
+    def __init__(self, coordinator: SurfForecastDataUpdateCoordinator) -> None:
         """Initialize."""
         super().__init__(coordinator)
         config_entry = coordinator.config_entry

@@ -5,8 +5,8 @@
         "@victorigualada"
     ],
     "config_flow": true,
-    "documentation": "https://github.com/victorigualada/integration_blueprint",
+    "documentation": "https://github.com/victorigualada/surf_forecast_integration",
     "iot_class": "cloud_polling",
-    "issue_tracker": "https://github.com/victorigualada/integration_blueprint/issues",
+    "issue_tracker": "https://github.com/victorigualada/surf_forecast_integration/issues",
     "version": "0.1.0"
 }

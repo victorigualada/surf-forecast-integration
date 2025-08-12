@@ -1,4 +1,4 @@
-"""Adds config flow for Blueprint."""
+"""Adds config flow."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ async def async_search_spots(session: ClientSession, spot_query: str):  # noqa: 
 
 
 class SurfForecastFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
-    """Config flow for Blueprint."""
+    """Config flow."""
 
     VERSION = 1
 

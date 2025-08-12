@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from homeassistant.loader import Integration
 
     from .api import SurfForecastIntegrationApiClient
-    from .coordinator import BlueprintDataUpdateCoordinator
+    from .coordinator import SurfForecastDataUpdateCoordinator
 
 type SurfForecastIntegrationConfigEntry = ConfigEntry["SurfForecastIntegrationData"]
 
@@ -20,5 +20,5 @@ class SurfForecastIntegrationData:
     """Data for the Surf Forecast integration."""
 
     client: SurfForecastIntegrationApiClient
-    coordinator: BlueprintDataUpdateCoordinator
+    coordinator: SurfForecastDataUpdateCoordinator
     integration: Integration

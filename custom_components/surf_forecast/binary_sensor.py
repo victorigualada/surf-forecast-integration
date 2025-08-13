@@ -1,4 +1,4 @@
-"""Binary sensor platform for surf_forecast_integration."""
+"""Binary sensor platform for surf_forecast."""
 
 from __future__ import annotations
 

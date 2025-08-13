@@ -1,6 +1,7 @@
 # Surf Forecast Integration for Home Assistant
 
 This custom integration brings Surfline surf forecasts and conditions into Home Assistant, providing sensors, selects, and automations for your favorite surf spots.
+Get notified on your phone when your desired surf conditions are met for each spot.
 
 ## Features
 
@@ -14,9 +15,9 @@ This custom integration brings Surfline surf forecasts and conditions into Home 
 
 ## Installation
 
-1. Copy the `surf_forecast_integration` folder to your Home Assistant `custom_components` directory:
+1. Copy the `surf_forecast` folder to your Home Assistant `custom_components` directory:
 	 ```
-	 custom_components/surf_forecast_integration/
+	 custom_components/surf_forecast/
 	 ```
 2. Restart Home Assistant.
 3. Add the integration via the Home Assistant UI (Settings → Devices & Services → Add Integration → Surf Forecast Integration).
@@ -41,7 +42,7 @@ This custom integration brings Surfline surf forecasts and conditions into Home 
 
 Blueprints are provided in `config/blueprints/automation/`:
 
-- `surf_spot_good_condition_notification.yaml`: Notifies your phone when good conditions are met for a spot.
+- `surf_incmoming_notification.yaml`: Notifies your phone when desired conditions are met for a spot.
 
 ## Translations
 

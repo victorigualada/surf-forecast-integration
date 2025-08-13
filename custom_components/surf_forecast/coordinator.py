@@ -1,4 +1,4 @@
-"""DataUpdateCoordinator for surf_forecast_integration."""
+"""DataUpdateCoordinator for surf_forecast."""
 
 from __future__ import annotations
 

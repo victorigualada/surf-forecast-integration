@@ -170,14 +170,15 @@ class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
-        """Expose all forecasted ratings and location as attributes."""
+        """Expose all forecasted ratings, location, spot_id, and href as attributes."""
         data = self.coordinator.data
-        if not data or "data" not in data or "rating" not in data["data"]:
-            return {}
         return {
-            "forecast": data["data"]["rating"],
-            "location": data.get("associated", {}).get("location"),
+            "spot_id": self.config_entry.data.get("spot_id"),
+            "location": (data.get("associated", {}).get("location") if data else None),
+            "href": self.config_entry.data.get("href"),
+            "forecast": (
+                data["data"]["rating"]
+                if data and "data" in data and "rating" in data["data"]
+                else []
+            ),
         }
-
-
-# Remove duplicate async_setup_entry and unused code at the end

@@ -92,7 +92,16 @@ class SurfForecastFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 if spot:
                     return self.async_create_entry(
                         title=f"{spot['name']} ({spot['city']})",
-                        data=spot,
+                        data={
+                            "spot_id": spot["spot_id"],
+                            "name": spot["name"],
+                            "city": spot["city"],
+                            "region": spot.get("region"),
+                            "country": spot.get("country"),
+                            "latitude": spot.get("latitude"),
+                            "longitude": spot.get("longitude"),
+                            "href": spot.get("href"),
+                        },
                     )
                 errors["base"] = "unknown"
         return self.async_show_form(

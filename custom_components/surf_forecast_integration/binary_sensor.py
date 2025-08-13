@@ -86,8 +86,8 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
         """Initialize the Surfline good conditions binary sensor."""
         super().__init__(coordinator)
         self.config_entry = config_entry
-        self._attr_unique_id = f"{config_entry.entry_id}_good_conditions"
-        self._attr_name = "Good Surf Conditions"
+        self._attr_unique_id = f"{config_entry.entry_id}_incoming_surf"
+        self._attr_name = "Incoming Surf"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,

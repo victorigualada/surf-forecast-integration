@@ -84,8 +84,8 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
         """
         super().__init__(coordinator)
         self.config_entry = config_entry
-        self._attr_unique_id = f"{config_entry.entry_id}_next_desired_condition_date"
-        self._attr_name = "Next Desired Condition Date"
+        self._attr_unique_id = f"{config_entry.entry_id}_incoming_surf_date"
+        self._attr_name = "Incoming Surf date"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,
@@ -122,6 +122,11 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
                 )
         return None
 
+    @property
+    def icon(self) -> str:
+        """Return a calendar icon for the date sensor."""
+        return "mdi:calendar"
+
 
 class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
     """Sensor for Surfline spot rating (current/next rating)."""
@@ -134,7 +139,7 @@ class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self.config_entry = config_entry
         self._attr_unique_id = f"{config_entry.entry_id}_surf_rating"
-        self._attr_name = "Surf Rating"
+        self._attr_name = "Surf rating"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,

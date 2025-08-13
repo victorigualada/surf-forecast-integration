@@ -31,11 +31,11 @@ This custom integration brings Surfline surf forecasts and conditions into Home 
 
 - **Sensor:**
 	- `sensor.<spot>_surf_rating`: Current/next surf rating
-	- `sensor.<spot>_first_met_condition`: Date when good conditions are first met
+	- `sensor.<spot>_incoming_surf_date`: Date when good conditions are first met
 - **Select:**
 	- `select.<spot>_minimum_surf_rating`: Set your minimum desired surf rating
 - **Binary Sensor:**
-	- `binary_sensor.<spot>_good_conditions`: On when forecast meets/exceeds your minimum rating
+	- `binary_sensor.<spot>_incoming_surf`: On when forecast meets/exceeds your minimum rating
 
 ## Automation Blueprint
 

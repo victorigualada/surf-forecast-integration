@@ -8,13 +8,19 @@ blueprint:
       description: The spot from Surf Forecast to monitor.
       selector:
         device:
-          integration: surf_forecast
+          integration: surf_forecast_integration
     notify_device:
       name: Device to notify
       description: The device to send the notification to
       selector:
         device:
           integration: mobile_app
+    sun_condition:
+      name: Only notify if surf is during the day
+      description: Enable to only send notifications when the desired surf conditions are during the day.
+      default: true
+      selector:
+        boolean:
     title:
       name: Noticiation title
       description: The title of the notification to send.
@@ -41,17 +47,26 @@ action:
   - variables:
       selected_device: !input notify_device
       selected_device_slug: "{{ device_attr(selected_device, 'name') | slugify }}"
-      notify_services: >-
+      notify_service: >-
         {{
           integration_entities('mobile_app')
           | select('match', 'device_tracker')
           | map('regex_replace', '^device_tracker\\.', 'notify.mobile_app_')
           | select('search', selected_device_slug)
           | list
+          | first
         }}
       selected_spot_device_id: !input surf_spot
       spot: "{{ device_attr(selected_spot_device_id, 'name') | default('Unknown Spot') }}"
       date: "{{ states(device_entities(selected_spot_device_id)  | select('search', '_incoming_surf_date')  | list | first) | as_datetime | as_timestamp | timestamp_custom('%A %d %B %Y %H:%M') }}"
+      surf_datetime: >-
+        {{ states(device_entities(selected_spot_device_id)
+          | select('search', '_incoming_surf_date')
+          | list
+          | first) | as_datetime }}
+      sunrise: "{{ state_attr('sun.sun', 'next_rising') | as_datetime }}"
+      dusk: "{{ state_attr('sun.sun', 'next_dusk') | as_datetime }}"
+      sun_condition_enabled: !input sun_condition
       message_template: !input message
       msg: >-
         {{
@@ -60,21 +75,21 @@ action:
               | replace('{date}', date | default('Unknown Date'))
           )
         }}
-  - choose:
-      - conditions: "{{ notify_services | length > 0 }}"
-        sequence:
-          - service: "{{ notify_services[0] }}"
-            data:
-              title: "SUUUURFING ALERT!"
-              message: "{{ msg }}"
-              data:
-                notification_icon: "mdi:surfing"
-                actions:
-                  - action: "URI"
-                    title: "Open Surfline"
-                    uri: "{{ state_attr(device_entities(selected_spot_device_id)  | select('search', '_surf_rating')  | list | first , 'href') }}#forecast"
-    default:
-      - service: persistent_notification.create
+  - if:
+      - condition: template
+        value_template: >-
+          {% set surf_t = (surf_datetime | as_datetime).time() %}
+          {% set rise_t = (sunrise | as_datetime).time() %}
+          {% set dusk_t = (dusk | as_datetime).time() %}
+          {{ not sun_condition_enabled or (surf_t >= rise_t and surf_t <= dusk_t) }}
+    then:
+      - service: "{{ notify_service }}"
         data:
-          title: "Notification Error"
-          message: "No valid notify service found for the selected device. {{ selected_device_slug }}"
+          title: "SUUUURFING ALERT!"
+          message: "{{ msg }}"
+          data:
+            notification_icon: "mdi:surfing"
+            actions:
+              - action: "URI"
+                title: "Open Surfline"
+                uri: "{{ state_attr(device_entities(selected_spot_device_id)  | select('search', '_surf_rating')  | list | first , 'href') }}#forecast"

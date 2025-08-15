@@ -14,7 +14,7 @@ This custom integration brings Surfline surf forecasts and conditions into Home 
 ## Automation Blueprints
 
 
-- `surf_incmoming_notification.yaml`: Notifies your phone when desired conditions are met for a spot.
+- `surf_incoming_notification.yaml`: Notifies your phone when desired conditions are met for a spot.
 
   [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fvictorigualada%2Fsurf-forecast-integration%2Fblob%2Fmain%2Fblueprints%2Fsurf_incoming_notification.yaml)
 

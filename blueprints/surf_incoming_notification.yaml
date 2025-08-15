@@ -22,7 +22,7 @@ blueprint:
       selector:
         boolean:
     title:
-      name: Noticiation title
+      name: Notification title
       description: The title of the notification to send.
       default: "SUUUUURFING ALERT!"
     message:

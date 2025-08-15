@@ -39,9 +39,7 @@ async def async_setup_entry(
     """Set up this integration using UI."""
     coordinator = SurfForecastDataUpdateCoordinator(
         hass=hass,
-        logger=LOGGER,
-        name=DOMAIN,
-        update_interval=timedelta(hours=1),
+        config_entry=entry,
     )
     entry.runtime_data = SurfForecastIntegrationData(
         client=SurfForecastIntegrationApiClient(

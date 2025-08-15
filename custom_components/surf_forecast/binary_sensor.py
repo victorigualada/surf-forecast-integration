@@ -1,4 +1,4 @@
-"""Binary sensor platform for surf_forecast."""
+"""Binary sensor platform for surf_forecast_integration."""
 
 from __future__ import annotations
 
@@ -45,34 +45,24 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
         # Listen for select changes
         spot_slug = slugify(self.config_entry.title)
         select_entity_id = f"select.{spot_slug}_minimum_surf_rating"
-        sensor_entity_id = f"sensor.{spot_slug}_surf_rating"
+        rating_entity_id = f"sensor.{spot_slug}_surf_rating"
+
+        async def _handle_related_change(event: object) -> None:
+            self.async_write_ha_state()
+
+        # Listen for changes to the select entity
         self.async_on_remove(
             async_track_state_change_event(
-                self.hass,
-                select_entity_id,
-                self._handle_select_change,
+                self.hass, select_entity_id, _handle_related_change
             )
         )
-        # Listen for sensor state changes
+        # Listen for changes to the rating sensor entity
         self.async_on_remove(
             async_track_state_change_event(
-                self.hass,
-                sensor_entity_id,
-                self._handle_sensor_change,
+                self.hass, rating_entity_id, _handle_related_change
             )
         )
-        # Listen for coordinator data refresh
-        self.async_on_remove(
-            self.coordinator.async_add_listener(self.async_write_ha_state)
-        )
-
-    async def _handle_sensor_change(self, event: object) -> None:  # noqa: ARG002
-        """Handle sensor entity state change by updating binary sensor state."""
-        self.async_write_ha_state()
-
-    async def _handle_select_change(self, event: object) -> None:  # noqa: ARG002
-        """Handle select entity state change by updating binary sensor state."""
-        self.async_write_ha_state()
+        # Also listen for coordinator updates (already handled by CoordinatorEntity)
 
     """
     Binary sensor that is on if any forecasted rating meets or exceeds the selected.

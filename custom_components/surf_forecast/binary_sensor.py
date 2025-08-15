@@ -59,7 +59,6 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
                 self.hass, rating_entity_id, _handle_related_change
             )
         )
-        # Also listen for coordinator updates (already handled by CoordinatorEntity)
 
     """
     Binary sensor that is on if any forecasted rating meets or exceeds the selected.

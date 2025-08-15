@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
@@ -11,8 +10,6 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
 from .const import DOMAIN, SURFLINE_RATING_LEVELS
-
-_LOGGER = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -47,7 +44,7 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
         select_entity_id = f"select.{spot_slug}_minimum_surf_rating"
         rating_entity_id = f"sensor.{spot_slug}_surf_rating"
 
-        async def _handle_related_change(event: object) -> None:
+        async def _handle_related_change(event: object) -> None:  # noqa: ARG001
             self.async_write_ha_state()
 
         # Listen for changes to the select entity

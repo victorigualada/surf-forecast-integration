@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-import logging
 import socket
 from typing import Any
 
 import aiohttp
-
-_LOGGER = logging.getLogger(__name__)
 
 SURFLINE_SEARCH_URL = "https://services.surfline.com/search/site?q=${spot_name_or_city_name}&querySize=10&suggestionSize=10&newsSearch=false^&includeWavePools=false"
 SURFLINE_RATINGS_URL = "https://services.surfline.com/kbyg/spots/forecasts/ratings"

@@ -1,4 +1,4 @@
-"""Select platform for surf_forecast_integration."""
+"""Select platform for surf_forecast."""
 
 from __future__ import annotations
 

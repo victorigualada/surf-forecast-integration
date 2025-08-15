@@ -1,4 +1,4 @@
-"""Diagnostics support for surf_forecast_integration."""
+"""Diagnostics support for surf_forecast."""
 
 from __future__ import annotations
 

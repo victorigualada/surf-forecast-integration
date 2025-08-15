@@ -1,4 +1,4 @@
-"""Custom types for surf_forecast_integration."""
+"""Custom types for surf_forecast."""
 
 from __future__ import annotations
 

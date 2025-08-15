@@ -1,0 +1,26 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Cerca spot di surf",
+                "description": "Inserisci il nome dello spot di surf che vuoi aggiungere. Deve essere un nome di spot e non una località o una città. Puoi cercarli su https://www.surfline.com",
+                "data": {
+                    "spot_query": "Nome dello spot"
+                }
+            },
+            "select_spot": {
+                "title": "Spot di surf",
+                "description": "Seleziona lo spot di surf che vuoi aggiungere.",
+                "data": {
+                    "spot_id": "Spot di surf"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Impossibile connettersi all'API di Surfline.",
+            "no_spots_found": "Nessuno spot di surf trovato.",
+            "unknown": "Si è verificato un errore sconosciuto.",
+            "already_configured": "Tutti gli spot corrispondenti alla tua ricerca sono già configurati."
+        }
+    }
+}

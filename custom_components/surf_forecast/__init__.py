@@ -1,5 +1,5 @@
 """
-Custom integration to integrate surf_forecast_integration with Home Assistant.
+Custom integration to integrate surf_forecast with Home Assistant.
 
 For more details about this integration, please refer to
 https://github.com/victorigualada/surf_forecast_integration

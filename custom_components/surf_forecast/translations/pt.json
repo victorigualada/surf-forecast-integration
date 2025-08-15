@@ -1,0 +1,26 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Buscar pico de surf",
+                "description": "Digite o nome do pico de surf que deseja adicionar. Deve ser um nome de pico e não uma localização ou cidade. Você pode pesquisá-los em https://www.surfline.com",
+                "data": {
+                    "spot_query": "Nome do pico"
+                }
+            },
+            "select_spot": {
+                "title": "Picos de surf",
+                "description": "Selecione o pico de surf que deseja adicionar.",
+                "data": {
+                    "spot_id": "Picos de surf"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Não foi possível conectar à API do Surfline.",
+            "no_spots_found": "Nenhum pico de surf encontrado.",
+            "unknown": "Ocorreu um erro desconhecido.",
+            "already_configured": "Todos os picos correspondentes à sua pesquisa já estão configurados."
+        }
+    }
+}

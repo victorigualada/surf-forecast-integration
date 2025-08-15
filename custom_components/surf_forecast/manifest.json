@@ -1,6 +1,6 @@
 {
-    "domain": "surf_forecast_integration",
-    "name": "Surf forecast integration",
+    "domain": "surf_forecast",
+    "name": "Surf forecast",
     "codeowners": [
         "@victorigualada"
     ],

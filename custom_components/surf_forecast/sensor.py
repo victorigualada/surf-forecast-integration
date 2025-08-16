@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
@@ -37,8 +36,6 @@ async def async_setup_entry(
 
 class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
     """Sensor for the first forecasted date/time that meets the selected min rating."""
-
-    _LOGGER = logging.getLogger(__name__)
 
     async def async_added_to_hass(self) -> None:
         """Subscribe to select entity state changes and coordinator updates."""

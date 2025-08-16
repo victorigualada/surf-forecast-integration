@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -15,6 +16,8 @@ from .api import (
 )
 
 if TYPE_CHECKING:
+    from logging import Logger
+
     from .data import SurfForecastIntegrationConfigEntry
 
 
@@ -23,6 +26,23 @@ class SurfForecastDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
     config_entry: SurfForecastIntegrationConfigEntry
+
+    def __init__(
+        self,
+        hass: Any,
+        logger: Logger,
+        name: str,
+        config_entry: SurfForecastIntegrationConfigEntry,
+    ) -> None:
+        """Initialize the SurfForecastDataUpdateCoordinator with 1h polling."""
+        super().__init__(
+            hass,
+            logger=logger,
+            name=name,
+            update_interval=timedelta(hours=1),
+            config_entry=config_entry,
+        )
+        self.config_entry = config_entry
 
     async def _async_update_data(self) -> Any:
         """Update data via library."""

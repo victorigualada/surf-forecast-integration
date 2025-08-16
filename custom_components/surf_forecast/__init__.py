@@ -7,7 +7,6 @@ https://github.com/victorigualada/surf_forecast_integration
 
 from __future__ import annotations
 
-from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from homeassistant.const import Platform
@@ -39,6 +38,8 @@ async def async_setup_entry(
     """Set up this integration using UI."""
     coordinator = SurfForecastDataUpdateCoordinator(
         hass=hass,
+        logger=LOGGER,
+        name=DOMAIN,
         config_entry=entry,
     )
     entry.runtime_data = SurfForecastIntegrationData(

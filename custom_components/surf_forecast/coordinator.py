@@ -14,9 +14,10 @@ from .api import (
     SurfForecastIntegrationApiClientAuthenticationError,
     SurfForecastIntegrationApiClientError,
 )
-from .const import LOGGER
 
 if TYPE_CHECKING:
+    from logging import Logger
+
     from .data import SurfForecastIntegrationConfigEntry
 
 
@@ -29,14 +30,17 @@ class SurfForecastDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(
         self,
         hass: Any,
+        logger: Logger,
+        name: str,
         config_entry: SurfForecastIntegrationConfigEntry,
     ) -> None:
         """Initialize the SurfForecastDataUpdateCoordinator with 1h polling."""
         super().__init__(
             hass,
-            logger=LOGGER,
-            name="Surf Forecast Data",
+            logger=logger,
+            name=name,
             update_interval=timedelta(hours=1),
+            config_entry=config_entry,
         )
         self.config_entry = config_entry
 

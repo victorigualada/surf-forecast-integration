@@ -98,7 +98,12 @@ class SurflineConditionBinarySensor(CoordinatorEntity, BinarySensorEntity):
         sensor_state = hass.states.get(sensor_entity_id)
         forecast = sensor_state.attributes.get("forecast") if sensor_state else None
 
-        if not min_rating or not forecast:
+        if (
+            not min_rating
+            or min_rating == "unavailable"
+            or min_rating not in SURFLINE_RATING_LEVELS
+            or not forecast
+        ):
             return False
         min_index = SURFLINE_RATING_LEVELS.index(min_rating)
         # Iterate over all forecasted values in the attributes

@@ -27,12 +27,19 @@ async def async_setup_entry(
 
 
 class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
+    """
+    Select entity for minimum surf rating preference.
+
+    Allows users to choose and persist their preferred minimum surf rating
+
+    for surf forecast entities.
+
+    """
+
     @property
     def available(self) -> bool:
         """Keep select entity available during coordinator refreshes."""
         return self.coordinator.last_update_success or self.coordinator.data is not None
-
-    """Select entity for minimum surf rating preference."""
 
     _attr_has_entity_name = True
     _attr_translation_key = "min_rating"
@@ -49,6 +56,7 @@ class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
         Args:
             coordinator: The data update coordinator for surf forecast.
             config_entry: The config entry associated with this entity.
+
         """
         super().__init__(coordinator)
         self.config_entry = config_entry

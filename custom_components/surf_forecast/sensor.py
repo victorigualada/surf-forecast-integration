@@ -35,6 +35,13 @@ async def async_setup_entry(
 
 
 class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
+    """
+    Sensor for the first forecasted date/time that meets or exceeds the selected.
+
+    minimum surf rating.
+
+    """
+
     @property
     def available(self) -> bool:
         """Keep sensor available during coordinator refreshes."""
@@ -137,6 +144,8 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
 
 
 class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
+    """Sensor for Surfline spot rating (current/next rating)."""
+
     @property
     def available(self) -> bool:
         """Keep sensor available during coordinator refreshes."""

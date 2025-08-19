@@ -27,7 +27,19 @@ async def async_setup_entry(
 
 
 class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
-    """Select entity for minimum surf rating preference."""
+    """
+    Select entity for minimum surf rating preference.
+
+    Allows users to choose and persist their preferred minimum surf rating
+
+    for surf forecast entities.
+
+    """
+
+    @property
+    def available(self) -> bool:
+        """Keep select entity available during coordinator refreshes."""
+        return self.coordinator.last_update_success or self.coordinator.data is not None
 
     _attr_has_entity_name = True
     _attr_translation_key = "min_rating"
@@ -51,7 +63,10 @@ class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
         self._attr_unique_id = f"{config_entry.entry_id}_min_rating"
         self._attr_name = "Minimum Surf Rating"
         self._attr_options = SURFLINE_RATING_LEVELS
-        self._attr_current_option = SURFLINE_RATING_LEVELS[0]
+        # Restore from config_entry.options if present, else use default
+        self._attr_current_option = config_entry.options.get(
+            "min_surf_rating", SURFLINE_RATING_LEVELS[0]
+        )
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": config_entry.title,
@@ -66,7 +81,7 @@ class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """
-        Change the selected minimum surf rating option.
+        Change the selected minimum surf rating option and persist it.
 
         Args:
             option: The new minimum surf rating to select.
@@ -74,5 +89,10 @@ class SurflineMinRatingSelect(CoordinatorEntity, SelectEntity):
         """
         if option in SURFLINE_RATING_LEVELS:
             self._attr_current_option = option
+            # Persist the selected option in config_entry.options
+            self.hass.config_entries.async_update_entry(
+                self.config_entry,
+                options={**self.config_entry.options, "min_surf_rating": option},
+            )
             self.async_write_ha_state()
-            await self.coordinator.async_request_refresh()
+            self.coordinator.async_update_listeners()

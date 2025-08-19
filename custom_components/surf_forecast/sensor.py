@@ -35,6 +35,18 @@ async def async_setup_entry(
 
 
 class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
+    """
+    Sensor for the first forecasted date/time that meets or exceeds the selected.
+
+    minimum surf rating.
+
+    """
+
+    @property
+    def available(self) -> bool:
+        """Keep sensor available during coordinator refreshes."""
+        return self.coordinator.last_update_success or self.coordinator.data is not None
+
     """Sensor for the first forecasted date/time that meets the selected min rating."""
 
     async def async_added_to_hass(self) -> None:
@@ -107,6 +119,12 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
         ):
             return None
 
+        if (
+            not min_rating
+            or min_rating == "unavailable"
+            or min_rating not in SURFLINE_RATING_LEVELS
+        ):
+            return None
         min_index = SURFLINE_RATING_LEVELS.index(min_rating)
         for rating in data["data"]["rating"]:
             key = rating["rating"].get("key")
@@ -126,6 +144,13 @@ class SurflineFirstMetConditionSensor(CoordinatorEntity, SensorEntity):
 
 
 class SurflineRatingSensor(CoordinatorEntity, SensorEntity):
+    """Sensor for Surfline spot rating (current/next rating)."""
+
+    @property
+    def available(self) -> bool:
+        """Keep sensor available during coordinator refreshes."""
+        return self.coordinator.last_update_success or self.coordinator.data is not None
+
     """Sensor for Surfline spot rating (current/next rating)."""
 
     _attr_has_entity_name = True

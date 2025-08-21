@@ -7,12 +7,18 @@ https://github.com/victorigualada/surf_forecast_integration
 
 from __future__ import annotations
 
+<<<<<<< Updated upstream
 from datetime import timedelta
+=======
+from pathlib import Path
+>>>>>>> Stashed changes
 from typing import TYPE_CHECKING
 
 from homeassistant.const import Platform
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
+
+from custom_components.surf_forecast import utils
 
 from .api import SurfForecastIntegrationApiClient
 from .const import DOMAIN, LOGGER
@@ -29,6 +35,26 @@ PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
     Platform.SELECT,
 ]
+
+
+async def async_setup(hass: HomeAssistant, config: dict) -> bool:  # noqa: ARG001
+    """Set up the Surf Forecast integration."""
+    LOGGER.debug("Setting up Surf Forecast integration")
+    # 1. Serve lovelace card
+    path = Path(__file__).parent / "www"
+    await utils.register_static_path(
+        hass,
+        "/surf_forecast/surf-forecast-card.js",
+        str(path / "surf-forecast-card.js"),
+    )
+
+    # 2. Add card to resources
+    version = getattr(hass.data["integrations"][DOMAIN], "version", 0)
+    await utils.init_resource(
+        hass, "/surf_forecast/surf-forecast-card.js", str(version)
+    )
+
+    return True
 
 
 # https://developers.home-assistant.io/docs/config_entries_index/#setting-up-an-entry
